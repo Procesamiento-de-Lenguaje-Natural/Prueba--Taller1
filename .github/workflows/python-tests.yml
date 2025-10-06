@@ -32,6 +32,10 @@ jobs:
     - name: Descargar tests privados desde repo privado
       run: |
         git clone git@github.com:Procesamiento-de-Lenguaje-Natural/Prueba---tests---clave-SSH---taller1.git temp_repo
+        echo "=== Estructura del repositorio de tests ==="
+        find temp_repo -type f -name "*.py" | head -20
+        echo "=== Contenido completo ==="
+        ls -la temp_repo/
         mkdir -p tests/ejercicio1
         cp temp_repo/test_validacion/ejercicio1/test_1.py tests/ejercicio1/test_1.py
         cp temp_repo/test_validacion/ejercicio1/test_2.py tests/ejercicio1/test_2.py
