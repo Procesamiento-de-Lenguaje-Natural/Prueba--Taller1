@@ -1,0 +1,48 @@
+name: Taller 1
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install jupyter nbconvert ipykernel
+        python -m ipykernel install --user --name=python3
+
+    - name: Configurar clave SSH para git
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.ACTIONS_SSH_KEY }}" > ~/.ssh/id_ed25519
+        chmod 600 ~/.ssh/id_ed25519
+        ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+    - name: Descargar tests privados desde repo privado
+      run: |
+        git clone git@github.com:Procesamiento-del-lenguaje-natural/Tests.git temp_repo
+        mkdir -p tests/ejercicio1
+        cp temp_repo/test_validacion/ejercicio1/test_1.py tests/ejercicio1/test_1.py
+        cp temp_repo/test_validacion/ejercicio1/test_2.py tests/ejercicio1/test_2.py
+        rm -rf temp_repo
+
+    - name: Ejecutar notebook ejercicio1
+      run: |
+        jupyter nbconvert --to notebook --execute notebooks/ejercicio1.ipynb --output ejercicio1_out.ipynb --ExecutePreprocessor.kernel_name=python3 --ExecutePreprocessor.timeout=300
+
+    - name: Correr test_1 ejercicio1
+      run: |
+        pytest tests/ejercicio1/test_1.py -v
+
+    - name: Correr test_2 ejercicio1
+      run: |
+        pytest tests/ejercicio1/test_2.py -v
