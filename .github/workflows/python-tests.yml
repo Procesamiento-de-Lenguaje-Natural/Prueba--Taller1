@@ -28,9 +28,6 @@ jobs:
         EOF
         chmod 600 ~/.ssh/id_ed25519
         ssh-keyscan github.com >> ~/.ssh/known_hosts
-        # Verificar que la clave se creó correctamente
-        ls -la ~/.ssh/id_ed25519
-        echo "Clave SSH configurada correctamente"
 
     - name: Descargar tests privados desde repo privado
       run: |
