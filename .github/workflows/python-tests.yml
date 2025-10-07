@@ -37,14 +37,27 @@ jobs:
         cp temp_repo/test_2.py tests_descargados/test_2.py 2>/dev/null || echo "test_2.py no encontrado"
         rm -rf temp_repo
 
+    - name: Debug - Ver contenido del test_2 descargado
+      run: |
+        echo "=== Contenido del test_2.py descargado ==="
+        cat tests_descargados/test_2.py
+        echo "=== Fin del contenido ==="
+
     - name: Ejecución notebook ejercicio1
       run: |
         jupyter nbconvert --to notebook --execute notebooks/ejercicio1.ipynb --output ejercicio1_out.ipynb --ExecutePreprocessor.kernel_name=python3 --ExecutePreprocessor.timeout=300 --ExecutePreprocessor.allow_errors=true
+
+    - name: Debug - Ver archivos generados
+      run: |
+        echo "=== Archivos en directorio raíz ==="
+        ls -la *.ipynb
+        echo "=== Archivos en notebooks/ ==="
+        ls -la notebooks/
 
     - name: Verificación test_1 ejercicio1
       run: |
         PYTHONPATH=$PYTHONPATH:$(pwd)/data pytest tests_descargados/test_1.py -v
 
-    - name: Verificación test_2 ejercicio1
+    - name: Verificación test_2 ejercicio1 con debug
       run: |
-        PYTHONPATH=$PYTHONPATH:$(pwd)/data pytest tests_descargados/test_2.py -v
+        PYTHONPATH=$PYTHONPATH:$(pwd)/data pytest tests_descargados/test_2.py -v -s
