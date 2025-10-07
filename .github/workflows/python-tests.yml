@@ -32,32 +32,19 @@ jobs:
     - name: Descarga de tests
       run: |
         git clone git@github.com:Procesamiento-de-Lenguaje-Natural/test-privado-taller1.git temp_repo
-        mkdir -p tests_descargados
-        cp temp_repo/test_1.py tests_descargados/test_1.py 2>/dev/null || echo "test_1.py no encontrado"
-        cp temp_repo/test_2.py tests_descargados/test_2.py 2>/dev/null || echo "test_2.py no encontrado"
+        mkdir -p tests_descargados/ejercicio1
+        cp temp_repo/test_1.py tests_descargados/ejercicio1/test_1.py 2>/dev/null || echo "test_1.py no encontrado"
+        cp temp_repo/test_2.py tests_descargados/ejercicio1/test_2.py 2>/dev/null || echo "test_2.py no encontrado"
         rm -rf temp_repo
-
-    - name: Debug - Ver contenido del test_2 descargado
-      run: |
-        echo "=== Contenido del test_2.py descargado ==="
-        cat tests_descargados/test_2.py
-        echo "=== Fin del contenido ==="
 
     - name: Ejecución notebook ejercicio1
       run: |
         jupyter nbconvert --to notebook --execute notebooks/ejercicio1.ipynb --output ../ejercicio1_out.ipynb --ExecutePreprocessor.kernel_name=python3 --ExecutePreprocessor.timeout=300 --ExecutePreprocessor.allow_errors=true
 
-    - name: Debug - Ver archivos generados
-      run: |
-        echo "=== Archivos .ipynb en directorio raíz ==="
-        ls -la *.ipynb 2>/dev/null || echo "No hay archivos .ipynb en raíz"
-        echo "=== Archivos en notebooks/ ==="
-        ls -la notebooks/*.ipynb
-
     - name: Verificación test_1 ejercicio1
       run: |
-        PYTHONPATH=$PYTHONPATH:$(pwd)/data pytest tests_descargados/test_1.py -v
+        PYTHONPATH=$PYTHONPATH:$(pwd)/data pytest tests_descargados/ejercicio1/test_1.py -v
 
-    - name: Verificación test_2 ejercicio1 con debug
+    - name: Verificación test_2 ejercicio1
       run: |
-        PYTHONPATH=$PYTHONPATH:$(pwd)/data pytest tests_descargados/test_2.py -v -s
+        PYTHONPATH=$PYTHONPATH:$(pwd)/data pytest tests_descargados/ejercicio1/test_2.py -v
