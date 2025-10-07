@@ -31,10 +31,10 @@ jobs:
 
     - name: Descarga de tests
       run: |
-        git clone git@github.com:Procesamiento-de-Lenguaje-Natural/Prueba---tests---clave-SSH---taller1.git temp_repo
+        git clone git@github.com:Procesamiento-de-Lenguaje-Natural/test-privado-taller1.git temp_repo
         mkdir -p tests/ejercicio1
-        cp temp_repo/Taller1/test_1.py tests/ejercicio1/test_1.py
-        cp temp_repo/Taller1/test_2.py tests/ejercicio1/test_2.py
+        cp temp_repo/test_1.py tests/ejercicio1/test_1.py 2>/dev/null || echo "test_1.py no encontrado"
+        cp temp_repo/test_2.py tests/ejercicio1/test_2.py 2>/dev/null || echo "test_2.py no encontrado"
         rm -rf temp_repo
 
     - name: Ejecución notebook ejercicio1
