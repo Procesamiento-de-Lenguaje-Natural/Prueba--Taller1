@@ -43,8 +43,8 @@ jobs:
 
     - name: Verificación test_1 ejercicio1
       run: |
-        pytest tests_descargados/test_1.py -v
+        PYTHONPATH=$PYTHONPATH:$(pwd)/data pytest tests_descargados/test_1.py -v
 
     - name: Verificación test_2 ejercicio1
       run: |
-        pytest tests_descargados/test_2.py -v
+        PYTHONPATH=$PYTHONPATH:$(pwd)/data pytest tests_descargados/test_2.py -v
