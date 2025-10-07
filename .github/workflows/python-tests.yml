@@ -32,8 +32,9 @@ jobs:
     - name: Descarga de tests
       run: |
         git clone git@github.com:Procesamiento-de-Lenguaje-Natural/test-privado-taller1.git temp_repo
-        mkdir -p tests_privados/ejercicio1
-        cp temp_repo/test_1.py tests_privados/ejercicio1/test_1.py 2>/dev/null || echo "test_1.py no encontrado"
+        mkdir -p tests_descargados
+        cp temp_repo/test_1.py tests_descargados/test_1.py 2>/dev/null || echo "test_1.py no encontrado"
+        cp temp_repo/test_2.py tests_descargados/test_2.py 2>/dev/null || echo "test_2.py no encontrado"
         rm -rf temp_repo
 
     - name: Ejecución notebook ejercicio1
@@ -42,4 +43,8 @@ jobs:
 
     - name: Verificación test_1 ejercicio1
       run: |
-        pytest tests_privados/ejercicio1/test_1.py -v
+        pytest tests_descargados/test_1.py -v
+
+    - name: Verificación test_2 ejercicio1
+      run: |
+        pytest tests_descargados/test_2.py -v
