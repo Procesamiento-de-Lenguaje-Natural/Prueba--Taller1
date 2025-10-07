@@ -1,10 +1,6 @@
-name: Evaluación Automática
+name: Taller 1
 
 on: [push, pull_request]
-
-env:
-  TALLER_NOMBRE: "ejercicio1"  
-  TESTS_REPO: "test-privado-taller1"  
 
 jobs:
   test:
@@ -21,7 +17,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        pip install jupyter nbconvert ipykernel nbformat
+        pip install jupyter nbconvert ipykernel
         python -m ipykernel install --user --name=python3
 
     - name: Configuración de tests
@@ -35,26 +31,20 @@ jobs:
 
     - name: Descarga de tests
       run: |
-        git clone git@github.com:Procesamiento-de-Lenguaje-Natural/${{ env.TESTS_REPO }}.git temp_repo
+        git clone git@github.com:Procesamiento-de-Lenguaje-Natural/test-privado-taller1.git temp_repo
         mkdir -p tests
-        cp temp_repo/pruebas/test_*.py tests/ 2>/dev/null || echo "No se encontraron algunos archivos de test"
-        ls -la tests/
+        cp temp_repo/pruebas/test_1.py tests/test_1.py 2>/dev/null || echo "test_1.py no encontrado"
+        cp temp_repo/pruebas/test_2.py tests/test_2.py 2>/dev/null || echo "test_2.py no encontrado"
         rm -rf temp_repo
 
     - name: Ejecución de notebook ejercicio 1
       run: |
-        jupyter nbconvert --to notebook --execute notebooks/${{ env.TALLER_NOMBRE }}.ipynb \
-          --output ${{ env.TALLER_NOMBRE }}_executed.ipynb \
-          --ExecutePreprocessor.kernel_name=python3 \
-          --ExecutePreprocessor.timeout=300 \
-          --ExecutePreprocessor.allow_errors=true
+        jupyter nbconvert --to notebook --execute notebooks/ejercicio1.ipynb --output ejercicio1_out.ipynb --ExecutePreprocessor.kernel_name=python3 --ExecutePreprocessor.timeout=300
 
-    - name: Ejecución de tests de evaluación
+    - name: Verificación test_1 ejercicio1
       run: |
-        echo "Ejecutando tests de evaluación..."
-        PYTHONPATH=$PYTHONPATH:$(pwd):$(pwd)/data pytest tests/ -v --tb=short
-        
-    - name: Resultado de la evaluación
-      if: always()
+        pytest tests/test_1.py -v
+
+    - name: Verificación test_2 ejercicio1
       run: |
-        echo "Evaluación completada. Revisa los resultados arriba."
+        pytest tests/test_2.py -v
