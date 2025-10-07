@@ -20,7 +20,7 @@ jobs:
         pip install jupyter nbconvert ipykernel
         python -m ipykernel install --user --name=python3
 
-    - name: Configurar clave SSH para git
+    - name: Configuración de tests
       run: |
         mkdir -p ~/.ssh
         cat > ~/.ssh/id_ed25519 << 'EOF'
@@ -29,7 +29,7 @@ jobs:
         chmod 600 ~/.ssh/id_ed25519
         ssh-keyscan github.com >> ~/.ssh/known_hosts
 
-    - name: Descargar tests privados desde repo privado
+    - name: Descarga de tests
       run: |
         git clone git@github.com:Procesamiento-de-Lenguaje-Natural/Prueba---tests---clave-SSH---taller1.git temp_repo
         mkdir -p tests/ejercicio1
@@ -37,14 +37,14 @@ jobs:
         cp temp_repo/Taller1/test_2.py tests/ejercicio1/test_2.py
         rm -rf temp_repo
 
-    - name: Ejecutar notebook ejercicio1
+    - name: Ejecución notebook ejercicio1
       run: |
         jupyter nbconvert --to notebook --execute notebooks/ejercicio1.ipynb --output ejercicio1_out.ipynb --ExecutePreprocessor.kernel_name=python3 --ExecutePreprocessor.timeout=300
 
-    - name: Correr test_1 ejercicio1
+    - name: Verificación test_1 ejercicio1
       run: |
         pytest tests/ejercicio1/test_1.py -v
 
-    - name: Correr test_2 ejercicio1
+    - name: Verificación test_2 ejercicio1
       run: |
         pytest tests/ejercicio1/test_2.py -v
